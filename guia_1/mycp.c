@@ -23,6 +23,7 @@ int main(int argc, char const *argv[]) {
 
     int bytesWritten = write(fd2, c, sz);
 
+    free(c);
     close(fd1);
     close(fd2);
 
