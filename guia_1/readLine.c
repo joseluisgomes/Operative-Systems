@@ -29,9 +29,8 @@ int main(int argc, char const *argv[]) {
 
 ssize_t readln(int fd, char *line, size_t size) {
     int bytesReaded;
-    char* target = strchr(line, '\n');
 
-    bytesReaded = read(fd, line, strlen(target));
+    bytesReaded = read(fd, line, size);
     if (bytesReaded < 0) {
         perror("r2");
         bytesReaded = 0; // O bytes readed 
