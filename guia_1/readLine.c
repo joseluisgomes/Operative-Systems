@@ -4,13 +4,13 @@
 #include <sys/types.h>
 #include <unistd.h> /* chamadas ao sistema: defs e decls essenciais */
 #include <fcntl.h> /* O_RDONLY, O_WRONLY, O_CREAT, O_* */
-#define SPACE 1024
+#define SPACE 1024 // Allocated memory for the String
 
 ssize_t readln(int fd, char *line, size_t size);
 
 int main(int argc, char const *argv[]) {
 
-    int line;
+    int bytesReaded;
     char* c = (char*) calloc(SPACE, sizeof(char));
     
     int fileDescriptor = open(argv[1], O_RDONLY);
@@ -19,36 +19,39 @@ int main(int argc, char const *argv[]) {
         exit(1);
     }
 
-    line = readln(fileDescriptor, c, 80);
+    bytesReaded = readln(fileDescriptor, c, SPACE);
 
-    printf("\nBytes readed -> %d\n", line);
+    printf("Bytes readed -> %d\n", bytesReaded);
 
     free(c);
     close(fileDescriptor);
-    return line;
+    return bytesReaded;
 }
 
 ssize_t readln(int fd, char *line, size_t size) {
     char* ln = calloc(SPACE, sizeof(char));
-    int result = read(fd, line, size);
-
-    if(result < 0) {
+    
+    int bytesReaded = read(fd, line, size);
+    if(bytesReaded < 0) {
         perror("r1");
         exit(1);
     }
-    int i = 0, i1 = 0, n = 1;
+
+    int i = 0, i1 = 0;
+    int numLines = 1; // #lines
     
     while(i <strlen(line)) {
         ln[i1] = line[i];
         i1++;
 
         if(line[i] == '\n') {
-            printf("%d: %s", n, ln);
+            printf("%d: %s", numLines, ln);
             ln[0] = '\0';
             i1 = 0;
-            n++;
+            numLines++;
         }
         i++;
     }
-    return result;
+    free(ln);
+    return bytesReaded;
 }
