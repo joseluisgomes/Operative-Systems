@@ -4,13 +4,14 @@
 #include <sys/types.h>
 #include <unistd.h> /* chamadas ao sistema: defs e decls essenciais */
 #include <fcntl.h> /* O_RDONLY, O_WRONLY, O_CREAT, O_* */
+#define SPACE 1024
 
 ssize_t readln(int fd, char *line, size_t size);
 
 int main(int argc, char const *argv[]) {
 
     int line;
-    char* c = (char*) calloc(1024, sizeof(char));
+    char* c = (char*) calloc(SPACE, sizeof(char));
     
     int fileDescriptor = open(argv[1], O_RDONLY);
     if (fileDescriptor < 0) {
@@ -28,7 +29,7 @@ int main(int argc, char const *argv[]) {
 }
 
 ssize_t readln(int fd, char *line, size_t size) {
-    char* ln = calloc(1024, sizeof(char));
+    char* ln = calloc(SPACE, sizeof(char));
     int result = read(fd, line, size);
 
     if(result < 0) {
