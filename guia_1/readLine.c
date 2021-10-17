@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <unistd.h> /* chamadas ao sistema: defs e decls essenciais */
 #include <fcntl.h> /* O_RDONLY, O_WRONLY, O_CREAT, O_* */
-#define SPACE 1024 // Allocated memory for the String
+#define SPACE 1024 // 1 KB = 1024 Bytes
 
 ssize_t readln(int fd, char *line, size_t size);
 
