@@ -25,5 +25,5 @@ int main(int argc, char const *argv[]) {
 
     free(c);
     close(fileDescriptor);
-    return bytesReaded;
+    return 0;
 }

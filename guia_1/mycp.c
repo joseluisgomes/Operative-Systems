@@ -11,6 +11,7 @@ int main(int argc, char const *argv[]) {
     fd1 = open(argv[1], O_RDONLY);
     if (fd1 < 0) {
         perror("r1");
+        fclose(fd1);
         exit(1);
     }
 
@@ -18,6 +19,7 @@ int main(int argc, char const *argv[]) {
     int fd2 = open("copy.txt", O_WRONLY | O_CREAT, 0644);
     if(fd2 < 0) {
         perror("r2");
+        fclose(sz);
         exit(1);              
     }
 
@@ -27,5 +29,5 @@ int main(int argc, char const *argv[]) {
     close(fd1);
     close(fd2);
 
-    return bytesWritten;
+    return 0;
 }

@@ -16,7 +16,6 @@ int main(int argc, char const *argv[]) {
     int fileDescriptor = open(argv[1], O_RDONLY);
     if (fileDescriptor < 0) {
         perror("r1");
-        fclose(fileDescriptor);
         exit(1);
     }
 
