@@ -6,7 +6,7 @@
 #include <fcntl.h> /* O_RDONLY, O_WRONLY, O_CREAT, O_* */
 
 int main(int argc, char const *argv[]) {
-    char* c = (char *) calloc(1024, sizeof(char));
+    char* c = (char*) calloc(1024, sizeof(char));
     int bytesReaded;
 
     while((bytesReaded = read(0, c, sizeof(c))) > 0) 

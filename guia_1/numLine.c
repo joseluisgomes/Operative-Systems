@@ -8,11 +8,10 @@
 ssize_t readln(int fd, char *line, size_t size);
 
 int main(int argc, char const *argv[]) {
+    int bytesReaded, fileDescriptor;
+    char* c = (char *) calloc(1024, sizeof(char));
 
-    int bytesReaded;
-    char* c = (char*) calloc(1024, sizeof(char));
-    
-    int fileDescriptor = open(argv[1], O_RDONLY, 0666);
+    fileDescriptor = open(argv[1], O_RDONLY, 0666);
     if (fileDescriptor < 0) {
         perror("r1");
         close(fileDescriptor);
@@ -28,9 +27,12 @@ int main(int argc, char const *argv[]) {
 
 ssize_t readln(int fd, char *line, size_t size) {
     int bytesReaded;
+    int numLines = 1; // #Lines
 
-    while ((bytesReaded = read(fd, line, size)) > 0) 
+    while ((bytesReaded = read(fd, line, size)) > 0) {
         write(1, line, bytesReaded);
-    
+        numLines++;
+    }
     return bytesReaded;
 }
+
