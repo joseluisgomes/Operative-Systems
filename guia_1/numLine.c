@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/types.h>
 #include <unistd.h> /* chamadas ao sistema: defs e decls essenciais */
 #include <fcntl.h> /* O_RDONLY, O_WRONLY, O_CREAT, O_* */
@@ -27,12 +26,10 @@ int main(int argc, char const *argv[]) {
 
 ssize_t readln(int fd, char *line, size_t size) {
     int bytesReaded;
-    int numLines = 1; // #Lines
 
-    while ((bytesReaded = read(fd, line, size)) > 0) {
+    while ((bytesReaded = read(fd, line, size)) > 0) 
         write(1, line, bytesReaded);
-        numLines++;
-    }
+    
     return bytesReaded;
 }
 
