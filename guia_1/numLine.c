@@ -7,17 +7,17 @@
 ssize_t readln(int fd, char *line, size_t size);
 
 int main(int argc, char const *argv[]) {
-    int bytesReaded, fileDescriptor;
-    char* c = (char *) calloc(1024, sizeof(char));
+    int fileDescriptor;
+    char* c = (char*) calloc(1024, sizeof(char));
 
     fileDescriptor = open(argv[1], O_RDONLY, 0666);
     if (fileDescriptor < 0) {
         perror("r1");
         close(fileDescriptor);
-        exit(1);
+        exit(0);
     }
 
-    bytesReaded = readln(fileDescriptor, c, 1024);
+    readln(fileDescriptor, c, 1024);
 
     free(c);
     close(fileDescriptor);
@@ -25,11 +25,25 @@ int main(int argc, char const *argv[]) {
 }
 
 ssize_t readln(int fd, char *line, size_t size) {
-    int bytesReaded;
+    int bytesReaded, numOfLines;
+    int i, j; // Counters
+    char* aux = (char*) calloc(size, sizeof(char));
 
-    while ((bytesReaded = read(fd, line, size)) > 0) 
-        write(1, line, bytesReaded);
-    
-    return bytesReaded;
+    numOfLines = 1;
+
+    while ((bytesReaded = read(fd, line, size)) > 0) {
+        
+        for(i = 0, j = 0; *(line + i) != '\0'; i++) {
+            *(aux + j) = *(line + i);
+            j++;
+
+            if(line[i] == '\n') {
+                printf("%d   %s", numOfLines, aux);
+                *aux = '\0';
+                numOfLines++;
+                j = 0;
+            }
+        }
+    }
 }
 
