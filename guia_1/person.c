@@ -12,10 +12,11 @@ typedef struct {
 } PERSON;
 
 ssize_t insertNewPerson(int fd, PERSON* p, size_t cnt);
+int updatedPersonAge(int fd, PERSON* p, size_t cnt);
 
 int main(int argc, char const *argv[]) {
     
-    int fileDescriptor = open("people.bin", O_RDWR | O_CREAT, 0664);
+    int fileDescriptor = open("people.bin", O_RDWR | O_CREAT | O_APPEND, 0664);
     char* errorMessage = NULL;
     
     if (fileDescriptor == -1 || argc != 4) {
@@ -26,24 +27,29 @@ int main(int argc, char const *argv[]) {
         free(errorMessage);
         close(fileDescriptor);
     } else {
-        
-        if(strcmp(argv[1], "-i") == 0) {
-            PERSON* person = (PERSON*) malloc(sizeof(PERSON));
-            person -> name = argv[2];
-            person -> age = atoi(argv[3]);
+        PERSON* person = (PERSON*) malloc(sizeof(PERSON));
+                person -> name = argv[2];
+                person -> age = atoi(argv[3]);
 
-            insertNewPerson(fileDescriptor, person, sizeof(PERSON));
-        } else {
-            // Update the person data "-u"
+        switch (*(argv[1] + 1)) {
+            case 'i':
+                insertNewPerson(fileDescriptor, person, sizeof(PERSON));
+                break;
+            case 'u':
+                updatedPersonAge(fileDescriptor, person, sizeof(PERSON));
+                break;
+            default: 
+                perror("Unknown command");
         }
+        free(person);
     }
+    close(fileDescriptor);
     return 0;
 }
 
 ssize_t insertNewPerson(int fd, PERSON* p, size_t cnt) {
 
-    PERSON* person = p;
-    if(person == NULL) 
+    if(p == NULL) 
         return 0;
     else {
         char* line = (char*) calloc(1024, sizeof(char));
@@ -51,6 +57,29 @@ ssize_t insertNewPerson(int fd, PERSON* p, size_t cnt) {
         if (readln(fd, line, 1024) > 0) 
             lseek(fd, cnt, SEEK_SET);
         
-        return write(fd, person, cnt);
+        free(line);
+        return write(fd, p, cnt);
+    }
+}
+
+int updatedPersonAge(int fd, PERSON* p, size_t cnt) {
+    
+    if (p == NULL)
+        return 0;
+    else {
+        PERSON* aux = (PERSON*) malloc(sizeof(PERSON));
+
+        while (read(fd, aux, sizeof(PERSON)) > 0) {
+            
+            if (strcmp(p -> name, aux -> name) == 0) {
+                aux -> age = p -> age;
+                
+                lseek(fd, -sizeof(PERSON), SEEK_CUR);
+                write(fd, aux, sizeof(PERSON));
+                break;
+            }
+        }
+        free(aux);
+        return p -> age;
     }
 }
