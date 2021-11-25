@@ -1,0 +1,6 @@
+char ch[4096];
+
+while(read(0, ch, 4096) > 0) {
+  write(1, ch, n);
+  i++;
+}

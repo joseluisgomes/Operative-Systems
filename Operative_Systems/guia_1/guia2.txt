@@ -1,0 +1,4 @@
+long/off lseek(int fd, long offset, unsigned whencer);
+
+3rd arg : SEEK_CUR(posição atual), SEEK_SET(inicio do ficheiro), SEEK_END(a partir do final do ficheiro);
+Retorna o deslocamento a partir do início do ficheiro
