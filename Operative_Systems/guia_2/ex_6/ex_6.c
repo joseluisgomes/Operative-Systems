@@ -10,9 +10,9 @@ int main(int argc, char const *argv[]) {
     int matrix[5][3] = {
         {0, 0, 0}, 
         {0, 0, 0}, 
-        {0, numberToSearch, 0},
-        {0, 0, 0}, 
         {0, 0, 0},
+        {0, 0, 0}, 
+        {numberToSearch, 0, 0},
     };
     pid_t pid;
 
@@ -24,35 +24,20 @@ int main(int argc, char const *argv[]) {
             _exit(0);
         } else
             if (pid == 0) { // Child process
-                int result = 0;
+                int result;
 
                 for (int j = 0; j < 3; j++) {
-                    result = findNumber(&matrix[i][j], numberToSearch);
-                    
-                    if (result == numberToSearch) {
+                    if (matrix[i][j] == numberToSearch) {
+                        result = numberToSearch;
                         printf(
-                            "Number pretended = %d, at [%d][%d]\n", 
-                            result, i , j
+                            "Number pretended: %d, at [%d][%d]\n",
+                            result, i, j
                         );
                         _exit(0);
-                    } else
-                        continue;
-                }     
-                continue;           
+                    }
+                }   
+                continue;     
             }
         return 0;
     }
-}
-
-int findNumber(int* array, int number) {
-    int result = 0;
-
-    for (int i = 0; i < 3; i++) {
-        if (array[i] == number) {
-            result = number;
-            break;
-        } else
-            continue;
-    }
-    return result;
 }
