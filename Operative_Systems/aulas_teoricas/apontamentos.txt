@@ -18,4 +18,39 @@ Como saber se os processos necessitam de CPU?
 Estados de um processo ? 
  -> Pronto - Em execução - Bloqueado;
 
- 
+---------------- Guião 4 ------------------
+exercício 2:
+
+ tips: 
+	
+	int main() {
+  		char string[MAX];
+  		int fd = open("/etc/passwd", O_RDONLY);
+  		dup2(0, fd);
+  
+  		close(fd);
+  		fgets(string, MAX, stdin);
+		
+		return 0;
+	}
+
+exercício 3:
+
+	execlp("wc", "wc", NULL);
+	
+Bíblia de OS : Advanced Programming in the Unix Environment
+
+----------------- Pipes anónimos --------------------------
+-> Obedecem à lógica FIFO 
+-> Aparecem sob a forma de descritores de ficheiros
+	sintaxe: int pipe(int pd[2])
+		read() -> pd[0] = lado do pipe onde se receve informação (fronteiras escritas perdem-se na leitura)
+		write() -> pd[1] = lado do pipe que imprime informação 
+ 		
+	o read() de 1 pipe bloqueia até ler 1 char ou até terminar o ficheiro.
+	Chega-se ao fim do ficheiro quando o descritor pd[1] estiver fechado e não existir nada.
+
+ANTENÇÃO: FECHAR DESCRITOR DE FICHEIROS!
+          Qualquer mensagem até 512 bytes, não há conflito de mensagens!
+
+
