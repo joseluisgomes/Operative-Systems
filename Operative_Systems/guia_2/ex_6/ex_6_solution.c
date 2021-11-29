@@ -55,7 +55,6 @@ int main(int argc, char const *argv[]) {
             }
             _exit(status);
         }
-                        
     } 
 
     // Receive all the returned and readed values by each process
