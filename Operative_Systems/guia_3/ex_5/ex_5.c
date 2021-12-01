@@ -7,7 +7,7 @@ int main(int argc, char const *argv[]) {
     pid_t pid[argc];    
     int status;
 
-    for (int i = 0; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
         if (!(pid[i] = fork())) { // Child process
             execlp(argv[i], argv[i], NULL);
             perror(argv[i]);
@@ -16,12 +16,12 @@ int main(int argc, char const *argv[]) {
         }    
     }
     
-    for (int i = 0; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
         waitpid(pid[i], &status, 0);
 
         if (WIFEXITED(status)) 
-            if (WEXITSTATUS(status))
-                printf("Child #%d , pid = %d FREE!", i + 1, pid[i]);
+            if (!WEXITSTATUS(status))
+                printf("Child #%d , pid = %d FREE!\n", i + 1, pid[i]);
     }
 
     return 0;
