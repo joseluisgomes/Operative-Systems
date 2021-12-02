@@ -1,2 +1,1 @@
-I will be printed in the file "saida.txt"
 This will also be output to the file named "saida.txt"
