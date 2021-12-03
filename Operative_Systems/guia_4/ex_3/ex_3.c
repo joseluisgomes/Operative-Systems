@@ -18,7 +18,7 @@ int main(int argc, char const *argv[]) {
     dup2(fd[1], 1);
     dup2(fd[2], 2);
 
-    if (!(chPid = fork())) {
+    if (!(chPid = fork())) { // Child process
         execlp(argv[1], argv[1], NULL);
         _exit(0);
     }
