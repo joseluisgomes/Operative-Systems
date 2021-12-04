@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 int main(int argc, char const *argv[]) {
-    int fd[2], status; // File descriptors, status and command position
+    int fd[2], status; // File descriptors
     int  position, j = 0;
     pid_t chPid; // Child pid
 
@@ -27,14 +27,13 @@ int main(int argc, char const *argv[]) {
         }
 
     char* args[] = {}; // Command arguments
-    ++position;
 
     for (int i = position; i < argc; i++, j++)
-        strcpy(args[j], argv[position]);
+        strcpy(args[j], argv[i]);
     args[j] = NULL;
 
     if (!(chPid = fork())) { // Child process
-        execvp(argv[5], args);
+        execvp(args[0], args);
         _exit(0);
     }
     
