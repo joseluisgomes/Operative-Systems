@@ -14,19 +14,15 @@ int main(int argc, char const *argv[]) {
         perror("pipe function failed");
         _exit(0);
     }
-    
+
     if (!(pid = fork())) { // Child process 
         close(fileDes[1]);
 
-        while ((numBytes = read(fileDes[0], inBuf, strlen(msg) + 1)) > 0) 
+        while ((numBytes = read(fileDes[0], inBuf, strlen(msg) + 1)) > 0)
             write(1, inBuf, strlen(msg) + 1);
-        
-        if (numBytes) {
-            close(fileDes[0]);
-            printf("Finished reading!\n");
-        }
-        _exit(1);
-    } else { // Parent process
+
+        _exit(1);                                  
+    } else {
         close(fileDes[0]);
 
         write(fileDes[1], msg, strlen(msg) + 1);

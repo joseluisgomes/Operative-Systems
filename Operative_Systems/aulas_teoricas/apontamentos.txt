@@ -54,3 +54,4 @@ ANTENÇÃO: FECHAR DESCRITOR DE FICHEIROS!
           Qualquer mensagem até 512 bytes, não há conflito de mensagens!
 
 
+NOTA: É obrigatório fazer dups para realizar execs!
