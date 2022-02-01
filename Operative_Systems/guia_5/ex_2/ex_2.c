@@ -1,37 +1,39 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <sys/wait.h>
 #include <unistd.h>
-#define MSGSIZE 16
+#include <sys/types.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 int main(int argc, char const *argv[]) {
-    int fileDes[2], numBytes, status; 
-    pid_t pid;
-    char inBuf[MSGSIZE]; // In buffer
-    char* msg = "Hello, World!";
+    int fds[2];
 
-    if (pipe(fileDes) < 0) {
-        perror("pipe function failed");
-        _exit(0);
+    if (pipe(fds) < -1) {
+        perror("pipe() failed.");
+        _exit(-1);
     }
+    
+    if (!fork()) {
+        char* msg = (char*) malloc(256);
+        
+        while (read(fds[0], msg, 256))
+            write(1, msg, 256);
 
-    if (!(pid = fork())) { // Child process 
-        close(fileDes[1]);
-
-        while ((numBytes = read(fileDes[0], inBuf, strlen(msg) + 1)) > 0)
-            write(1, inBuf, strlen(msg) + 1);
-
-        _exit(1);                                  
+        close(fds[0]);
+        free(msg);
     } else {
-        close(fileDes[0]);
-
-        write(fileDes[1], msg, strlen(msg) + 1);
-        close(fileDes[1]);
-
-        pid = wait(&status);
-        if (WIFEXITED(status))
-            if (WEXITSTATUS(status) == 1)
-                printf("\nChild -> pid = %d, free.\n", pid);
+        int fd;
+        char* msg = (char*) malloc(256);
+        
+        if ((fd = open("gretsch.txt", O_RDONLY, 0666)) == -1)
+            _exit(-1);
+        while (read(fd, msg, 256))
+            write(fds[1], msg, 256);
+        
+        free(msg);
+        close(fds[1]);
     }
+
     return 0;
 }

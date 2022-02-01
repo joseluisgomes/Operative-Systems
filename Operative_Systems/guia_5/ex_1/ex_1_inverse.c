@@ -17,15 +17,15 @@ int main(int argc, char const *argv[]) {
     }
     
     if (!fork()) {
+        write(fds[1], msg, msg_length);
+        close(fds[1]);
+    } else {
         char* msg = (char*) malloc(msg_length);
         read(fds[0], msg, msg_length);
         write(1, msg, msg_length);
 
         close(fds[0]);
         free(msg);
-    } else {
-        write(fds[1], msg, msg_length);
-        close(fds[1]);
     }
 
     return 0;

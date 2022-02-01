@@ -24,6 +24,7 @@ int main(int argc, char const *argv[]) {
         close(fds[0]);
         free(msg);
     } else {
+        sleep(5);
         write(fds[1], msg, msg_length);
         close(fds[1]);
     }
